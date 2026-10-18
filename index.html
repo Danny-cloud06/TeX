@@ -137,6 +137,12 @@
     <!-- ========================================== -->
     <section id="view-prompter" class="view view-fullscreen" aria-label="Teleprompter Reader">
 
+      <!-- Camera preview container (starts only when user requests) -->
+      <div id="camera-container" class="camera-container hidden" aria-hidden="true">
+        <video id="camera-video" autoplay playsinline muted></video>
+        <div class="camera-overlay"></div>
+      </div>
+
       <!-- Camera Lens Alignment Cue (Visual anchor to guide eyes to front camera) -->
       <div id="camera-guide" class="camera-guide" aria-hidden="true">
         <div class="camera-guide-arrow"></div>
@@ -167,7 +173,15 @@
           <button id="btn-prompter-settings" class="btn btn-hud-icon" title="Smart Prompter Settings" aria-label="Settings">
             <svg class="icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <circle cx="12" cy="12" r="3"></circle>
-              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65"></path>
+            </svg>
+          </button>
+
+          <!-- Camera Toggle -->
+          <button id="btn-camera-toggle" class="btn btn-hud-icon" title="Open Camera" aria-label="Open Camera">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+              <circle cx="12" cy="13" r="4"></circle>
             </svg>
           </button>
         </div>
@@ -196,6 +210,20 @@
       <!-- Tap to Play/Pause indicator flash -->
       <div id="prompter-tap-cue" class="prompter-tap-cue hidden">
         <span id="tap-cue-text">PAUSED</span>
+      </div>
+
+      <!-- Recording Countdown Overlay -->
+      <div id="record-countdown" class="record-countdown hidden" aria-hidden="true">
+        <span id="countdown-number">3</span>
+      </div>
+
+      <!-- Playback preview / recorded video -->
+      <div id="recording-playback" class="recording-playback hidden" aria-hidden="true">
+        <video id="playback-video" controls playsinline></video>
+        <div class="playback-actions">
+          <button id="btn-download-recording" class="btn btn-primary">Download</button>
+          <button id="btn-close-playback" class="btn btn-secondary">Close</button>
+        </div>
       </div>
 
       <!-- Bottom Floating Controls Dock -->
@@ -245,6 +273,17 @@
                 <line x1="5" y1="12" x2="19" y2="12"></line>
               </svg>
             </button>
+          </div>
+
+          <!-- Recording Controls Group -->
+          <div class="record-control-group">
+            <button id="btn-record-start" class="btn btn-card-launch">Record</button>
+            <button id="btn-record-pause" class="btn btn-secondary hidden">Pause</button>
+            <button id="btn-record-stop" class="btn btn-danger hidden">Stop</button>
+            <div id="recording-status" class="recording-status hidden">
+              <span id="recording-indicator" class="recording-indicator"></span>
+              <span id="recording-timer">00:00</span>
+            </div>
           </div>
         </div>
       </div>
@@ -392,7 +431,7 @@
           <div class="settings-footer-info">
             <span class="info-tag">TeX Architecture</span>
             <p>
-              Smart Eye Contact settings configured here set the physical reading bounding box. In Milestone 3, AI gaze assistance and camera tracking will feed directly into these coordinate offsets.
+              Smart Eye Contact settings configured here set the physical reading bounding box. In Milestone 3, AI gaze assistance and camera tracking will feed directly into these coordinate off[...] 
             </p>
           </div>
 
