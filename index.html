@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#090a0d">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="description" content="TeX - Mobile-First Smart Teleprompter & Content Creation Studio">
+  <title>TeX - Smart Teleprompter</title>
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+  <div id="app" class="app-root">
+
+    <!-- ========================================== -->
+    <!-- VIEW 1: SCRIPT LIBRARY                     -->
+    <!-- ========================================== -->
+    <section id="view-library" class="view view-active" aria-label="Script Library">
+      <header class="app-header">
+        <div class="brand">
+          <div class="brand-badge">TeX</div>
+          <div class="brand-meta">
+            <h1 class="brand-title">Smart Teleprompter</h1>
+            <span class="brand-tagline">Mobile Studio</span>
+          </div>
+        </div>
+        <div class="header-actions">
+          <button id="btn-new-script" class="btn btn-primary" title="Create New Script" aria-label="Create New Script">
+            <svg class="icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            <span>New Script</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Search & Filter Bar -->
+      <div class="search-section">
+        <div class="search-input-wrapper">
+          <svg class="icon search-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input type="search" id="search-input" placeholder="Search scripts..." autocomplete="off" spellcheck="false" aria-label="Search scripts">
+          <button id="btn-clear-search" class="btn-clear hidden" aria-label="Clear search">&times;</button>
+        </div>
+      </div>
+
+      <!-- Script List -->
+      <main class="library-content">
+        <div class="library-subheader">
+          <h2 class="section-title">Your Scripts</h2>
+          <span id="script-count-badge" class="badge">0</span>
+        </div>
+
+        <div id="script-list" class="script-grid" role="list">
+          <!-- Dynamic script cards rendered here -->
+        </div>
+
+        <!-- Empty State -->
+        <div id="empty-state" class="empty-state hidden">
+          <div class="empty-state-icon">
+            <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="12" y1="18" x2="12" y2="12"></line>
+              <line x1="9" y1="15" x2="15" y2="15"></line>
+            </svg>
+          </div>
+          <h3 class="empty-title">No scripts found</h3>
+          <p class="empty-desc">Create your first script or restore the sample script to start reading.</p>
+          <div class="empty-actions">
+            <button id="btn-empty-create" class="btn btn-primary">Create Script</button>
+            <button id="btn-restore-sample" class="btn btn-secondary">Restore Sample Script</button>
+          </div>
+        </div>
+      </main>
+
+      <footer class="app-footer">
+        <span>TeX Studio &bull; Offline &amp; Local Storage</span>
+      </footer>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- VIEW 2: SCRIPT EDITOR                      -->
+    <!-- ========================================== -->
+    <section id="view-editor" class="view" aria-label="Script Editor">
+      <header class="app-header editor-header">
+        <button id="btn-editor-back" class="btn btn-icon" title="Back to scripts" aria-label="Back">
+          <svg class="icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+        </button>
+
+        <div class="editor-header-title">
+          <span id="editor-mode-label" class="view-tag">Edit Script</span>
+          <span id="editor-save-status" class="save-indicator">Saved</span>
+        </div>
+
+        <div class="editor-header-actions">
+          <button id="btn-editor-prompt" class="btn btn-primary btn-sm" title="Launch Teleprompter">
+            <svg class="icon" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+              <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+            <span>Prompt</span>
+          </button>
+        </div>
+      </header>
+
+      <main class="editor-content">
+        <div class="editor-field title-field">
+          <input type="text" id="editor-title" placeholder="Script Title..." autocomplete="off" spellcheck="false" maxlength="120" aria-label="Script title">
+        </div>
+
+        <div class="editor-stats-bar">
+          <span id="editor-word-count">0 words</span>
+          <span class="stats-sep">&bull;</span>
+          <span id="editor-read-time">~0s reading time</span>
+          <span class="stats-sep">&bull;</span>
+          <span id="editor-char-count">0 chars</span>
+        </div>
+
+        <div class="editor-field body-field">
+          <textarea id="editor-body" placeholder="Type or paste your script here... Write naturally, exactly as you speak on camera." spellcheck="true" aria-label="Script text"></textarea>
+        </div>
+      </main>
+
+      <footer class="editor-bottom-bar">
+        <button id="btn-editor-save" class="btn btn-primary btn-block">Save Script</button>
+      </footer>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- VIEW 3: TELEPROMPTER READER VIEW           -->
+    <!-- ========================================== -->
+    <section id="view-prompter" class="view view-fullscreen" aria-label="Teleprompter Reader">
+
+      <!-- Camera Lens Alignment Cue (Visual anchor to guide eyes to front camera) -->
+      <div id="camera-guide" class="camera-guide" aria-hidden="true">
+        <div class="camera-guide-arrow"></div>
+        <div class="camera-guide-pip"></div>
+        <span class="camera-guide-text">LOOK HERE (CAMERA)</span>
+      </div>
+
+      <!-- Top Overlay Controls (Auto-hides or reveals on tap) -->
+      <div id="prompter-top-hud" class="prompter-hud prompter-hud-top">
+        <button id="btn-prompter-back" class="btn btn-hud-icon" title="Exit to scripts" aria-label="Exit Reader">
+          <svg class="icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+        </button>
+
+        <div class="prompter-hud-center">
+          <span id="prompter-title" class="prompter-title-display">Script Title</span>
+          <span id="prompter-progress-pct" class="prompter-pct">0%</span>
+        </div>
+
+        <div class="prompter-hud-actions">
+          <button id="btn-toggle-hud" class="btn btn-hud-icon" title="Toggle Distraction-Free Mode" aria-label="Distraction Free Mode">
+            <svg class="icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+              <circle cx="12" cy="12" r="3"></circle>
+            </svg>
+          </button>
+          <button id="btn-prompter-settings" class="btn btn-hud-icon" title="Smart Prompter Settings" aria-label="Settings">
+            <svg class="icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"></circle>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Eye-Focus Reading Line Marker (Horizontal guide at natural reading height) -->
+      <div id="prompter-focus-line" class="prompter-focus-line" aria-hidden="true">
+        <span class="focus-line-tag">READING ZONE</span>
+      </div>
+
+      <!-- Main Scrollable Prompter Track -->
+      <div id="prompter-viewport" class="prompter-viewport">
+        <div id="prompter-text-track" class="prompter-text-track">
+          <!-- Lead spacer so top text starts aligned with camera guide -->
+          <div class="prompter-lead-spacer"></div>
+          
+          <div id="prompter-body" class="prompter-body">
+            <!-- Rendered script paragraphs go here -->
+          </div>
+
+          <!-- Trail spacer so bottom text can scroll past the reading line -->
+          <div class="prompter-trail-spacer"></div>
+        </div>
+      </div>
+
+      <!-- Tap to Play/Pause indicator flash -->
+      <div id="prompter-tap-cue" class="prompter-tap-cue hidden">
+        <span id="tap-cue-text">PAUSED</span>
+      </div>
+
+      <!-- Bottom Floating Controls Dock -->
+      <div id="prompter-bottom-hud" class="prompter-hud prompter-hud-bottom">
+        <!-- Progress bar line -->
+        <div class="progress-bar-container">
+          <div id="prompter-progress-bar" class="progress-bar-fill"></div>
+        </div>
+
+        <div class="bottom-dock-controls">
+          <!-- Restart button -->
+          <button id="btn-prompter-restart" class="btn btn-hud-pill" title="Restart from beginning" aria-label="Restart">
+            <svg class="icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="1 4 1 10 7 10"></polyline>
+              <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+            </svg>
+            <span>Reset</span>
+          </button>
+
+          <!-- Main Play / Pause Button -->
+          <button id="btn-prompter-play" class="btn btn-play-pulse" title="Play or Pause (Tap anywhere to toggle)" aria-label="Play or Pause">
+            <svg id="icon-play" class="icon-play" viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
+              <polygon points="6 4 20 12 6 20 6 4"></polygon>
+            </svg>
+            <svg id="icon-pause" class="icon-pause hidden" viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
+              <rect x="6" y="4" width="4" height="16" rx="1"></rect>
+              <rect x="14" y="4" width="4" height="16" rx="1"></rect>
+            </svg>
+          </button>
+
+          <!-- Speed Controls -->
+          <div class="speed-control-group">
+            <button id="btn-speed-down" class="btn btn-speed-step" title="Decrease Speed" aria-label="Slower">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+            </button>
+
+            <div class="speed-indicator-box">
+              <span id="speed-label" class="speed-value">2.5</span>
+              <span class="speed-unit">spd</span>
+            </div>
+
+            <button id="btn-speed-up" class="btn btn-speed-step" title="Increase Speed" aria-label="Faster">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- MODAL: SETTINGS & SMART EYE CONTACT SETUP  -->
+    <!-- ========================================== -->
+    <div id="modal-settings" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="modal-settings-title">
+      <div class="modal-dialog">
+        <div class="modal-header">
+          <div class="modal-title-wrap">
+            <h3 id="modal-settings-title" class="modal-title">Teleprompter Settings</h3>
+            <span class="modal-subtitle">Reading &amp; Smart Eye Contact Foundation</span>
+          </div>
+          <button id="btn-close-settings" class="btn-modal-close" aria-label="Close settings">&times;</button>
+        </div>
+
+        <div class="modal-body">
+
+          <!-- Section: Smart Eye Contact Foundation -->
+          <div class="settings-group highlight-group">
+            <div class="settings-group-header">
+              <div class="group-title-with-badge">
+                <span class="settings-group-title">Smart Eye Contact Geometry</span>
+                <span class="badge badge-accent">Foundation</span>
+              </div>
+              <p class="settings-group-desc">
+                Adjusting text width and camera alignment keeps your eyes naturally locked onto the phone's camera lens while reading.
+              </p>
+            </div>
+
+            <!-- Reading Width (Eye Movement Minimizer) -->
+            <div class="setting-item">
+              <label for="setting-reading-width" class="setting-label">
+                <span>Reading Width (Eye Movement Minimizer)</span>
+                <span id="setting-width-display" class="setting-val">Compact (360px)</span>
+              </label>
+              <div class="segmented-control" role="radiogroup" aria-label="Reading width">
+                <button type="button" class="segment-btn active" data-width="compact">Compact</button>
+                <button type="button" class="segment-btn" data-width="medium">Standard</button>
+                <button type="button" class="segment-btn" data-width="full">Full Screen</button>
+              </div>
+              <p class="setting-hint">Compact keeps words directly below the camera lens, stopping your eyes from glancing side to side.</p>
+            </div>
+
+            <!-- Camera Lens Position Anchor -->
+            <div class="setting-item">
+              <label class="setting-label">
+                <span>Camera Position Anchor</span>
+                <span id="setting-anchor-display" class="setting-val">Top Center</span>
+              </label>
+              <div class="segmented-control" role="radiogroup" aria-label="Camera anchor">
+                <button type="button" class="segment-btn" data-anchor="left">Top Left</button>
+                <button type="button" class="segment-btn active" data-anchor="center">Top Center</button>
+                <button type="button" class="segment-btn" data-anchor="right">Top Right</button>
+              </div>
+              <p class="setting-hint">Matches your Android front camera punch-hole location.</p>
+            </div>
+
+            <!-- Reading Zone Vertical Offset -->
+            <div class="setting-item">
+              <label for="setting-vertical-offset" class="setting-label">
+                <span>Reading Distance from Top Camera</span>
+                <span id="setting-offset-display" class="setting-val">120px</span>
+              </label>
+              <input type="range" id="setting-vertical-offset" min="60" max="280" step="10" value="120" class="range-slider">
+              <p class="setting-hint">Closer to the top = more natural direct eye contact with the camera.</p>
+            </div>
+
+            <!-- Camera Guide Cue Toggle -->
+            <div class="setting-item switch-item">
+              <div class="switch-label-wrap">
+                <span class="switch-title">Show Camera Guide Marker</span>
+                <span class="switch-desc">Visual target pointing directly at the camera lens</span>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="setting-camera-guide" checked>
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+
+            <!-- Reading Focus Line Toggle -->
+            <div class="setting-item switch-item">
+              <div class="switch-label-wrap">
+                <span class="switch-title">Show Reading Zone Line</span>
+                <span class="switch-desc">Highlights the active eye-level reading zone</span>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="setting-focus-line" checked>
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Section: Typography & Speed -->
+          <div class="settings-group">
+            <span class="settings-group-title">Typography &amp; Display</span>
+
+            <!-- Font Size -->
+            <div class="setting-item">
+              <label for="setting-font-size" class="setting-label">
+                <span>Font Size</span>
+                <span id="setting-font-size-val" class="setting-val">32px</span>
+              </label>
+              <input type="range" id="setting-font-size" min="18" max="56" step="2" value="32" class="range-slider">
+            </div>
+
+            <!-- Line Spacing -->
+            <div class="setting-item">
+              <label for="setting-line-height" class="setting-label">
+                <span>Line Spacing</span>
+                <span id="setting-line-height-val" class="setting-val">1.6x</span>
+              </label>
+              <input type="range" id="setting-line-height" min="1.2" max="2.4" step="0.1" value="1.6" class="range-slider">
+            </div>
+
+            <!-- Text Alignment -->
+            <div class="setting-item">
+              <label class="setting-label">
+                <span>Text Alignment</span>
+                <span id="setting-align-display" class="setting-val">Center</span>
+              </label>
+              <div class="segmented-control" role="radiogroup" aria-label="Text alignment">
+                <button type="button" class="segment-btn" data-align="left">Left</button>
+                <button type="button" class="segment-btn active" data-align="center">Center</button>
+                <button type="button" class="segment-btn" data-align="right">Right</button>
+              </div>
+            </div>
+
+            <!-- Auto-hide controls during scrolling -->
+            <div class="setting-item switch-item">
+              <div class="switch-label-wrap">
+                <span class="switch-title">Auto-Hide Controls During Play</span>
+                <span class="switch-desc">Fades out UI for distraction-free reading</span>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="setting-auto-hide" checked>
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Milestone Roadmap Architecture Note -->
+          <div class="settings-footer-info">
+            <span class="info-tag">TeX Architecture</span>
+            <p>
+              Smart Eye Contact settings configured here set the physical reading bounding box. In Milestone 3, AI gaze assistance and camera tracking will feed directly into these coordinate offsets.
+            </p>
+          </div>
+
+        </div>
+
+        <div class="modal-footer">
+          <button id="btn-reset-settings" class="btn btn-secondary btn-sm">Reset Defaults</button>
+          <button id="btn-save-settings" class="btn btn-primary">Done</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL: DELETE CONFIRMATION                 -->
+    <!-- ========================================== -->
+    <div id="modal-delete" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="modal-delete-title">
+      <div class="modal-dialog modal-dialog-sm">
+        <div class="modal-header">
+          <h3 id="modal-delete-title" class="modal-title">Delete Script</h3>
+          <button id="btn-close-delete" class="btn-modal-close" aria-label="Cancel delete">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p>Are you sure you want to delete <strong id="delete-script-title">this script</strong>?</p>
+          <p class="modal-warn-text">This action cannot be undone.</p>
+        </div>
+        <div class="modal-footer">
+          <button id="btn-cancel-delete" class="btn btn-secondary">Cancel</button>
+          <button id="btn-confirm-delete" class="btn btn-danger">Delete</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Notification Overlay -->
+    <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
